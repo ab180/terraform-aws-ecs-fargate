@@ -354,4 +354,10 @@ resource "aws_ecs_service" "service" {
       Name = "${var.name_prefix}-service"
     },
   )
+
+  lifecycle {
+    ignore_changes = [
+      desired_count,
+    ]
+  }
 }
