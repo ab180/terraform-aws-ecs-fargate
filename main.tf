@@ -34,6 +34,14 @@ resource "aws_iam_role_policy" "read_repository_credentials" {
   policy = data.aws_iam_policy_document.read_repository_credentials[0].json
 }
 
+resource "aws_iam_role_policy" "get_environment_files" {
+  count = length(var.task_container_environment_files) != 0 ? 1 : 0
+
+  name   = "${var.name_prefix}-read-repository-credentials"
+  role   = aws_iam_role.execution.id
+  policy = data.aws_iam_policy_document.get_environment_files[0].json
+}
+
 #####
 # IAM - Task role, basic. Append policies to this role for S3, DynamoDB etc.
 #####
@@ -140,6 +148,20 @@ locals {
       value = v
     }
   ]
+
+  target_group_portMaps = length(var.target_groups) > 0 ? distinct([
+    for tg in var.target_groups : {
+      containerPort = contains(keys(tg), "container_port") ? tg.container_port : var.task_container_port
+      protocol      = contains(keys(tg), "protocol") ? lower(tg.protocol) : "tcp"
+    }
+  ]) : []
+
+  task_environment_files = [
+    for file in var.task_container_environment_files : {
+      value = file
+      type  = "s3"
+    }
+  ]
 }
 
 resource "aws_ecs_task_definition" "task" {
@@ -168,6 +190,9 @@ resource "aws_ecs_task_definition" "task" {
   },
   %{~endif}
   "essential": true,
+  %{if length(local.target_group_portMaps) > 0}
+  "portMappings": ${jsonencode(local.target_group_portMaps)},
+  %{else}
   %{if var.task_container_port != 0 || var.task_host_port != 0~}
   "portMappings": [
     {
@@ -180,6 +205,7 @@ resource "aws_ecs_task_definition" "task" {
       "protocol":"tcp"
     }
   ],
+  %{~endif}
   %{~endif}
   "logConfiguration": {
     "logDriver": "awslogs",
@@ -199,6 +225,9 @@ resource "aws_ecs_task_definition" "task" {
   },
   %{~endif}
   "command": ${jsonencode(var.task_container_command)},
+  %{if var.task_container_entrypoint != ""~}
+  "entryPoint": ${jsonencode(var.task_container_entrypoint)},
+  %{~endif}
   %{if var.task_container_working_directory != ""~}
   "workingDirectory": ${var.task_container_working_directory},
   %{~endif}
@@ -226,9 +255,16 @@ resource "aws_ecs_task_definition" "task" {
   %{if var.task_pseudo_terminal != null~}
   "pseudoTerminal": ${var.task_pseudo_terminal},
   %{~endif}
-  "environment": ${jsonencode(local.task_environment)}
+  "environment": ${jsonencode(local.task_environment)},
+  "environmentFiles": ${jsonencode(local.task_environment_files)},
+  "readonlyRootFilesystem": ${var.readonlyRootFilesystem ? true : false}
 }]
 EOF
+
+  runtime_platform {
+    operating_system_family = var.operating_system_family
+    cpu_architecture        = var.cpu_architecture
+  }
 
   dynamic "placement_constraints" {
     for_each = var.placement_constraints
@@ -299,14 +335,15 @@ resource "aws_ecs_service" "service" {
   task_definition = "${aws_ecs_task_definition.task.family}:${max(aws_ecs_task_definition.task.revision, data.aws_ecs_task_definition.task.revision)}"
 
   desired_count  = var.desired_count
-  propagate_tags = var.propogate_tags
+  propagate_tags = var.propagate_tags
 
   platform_version = var.platform_version
   launch_type      = length(var.capacity_provider_strategy) == 0 ? "FARGATE" : null
 
-  force_new_deployment   = var.force_new_deployment
-  wait_for_steady_state  = var.wait_for_steady_state
-  enable_execute_command = var.enable_execute_command
+  force_new_deployment    = var.force_new_deployment
+  wait_for_steady_state   = var.wait_for_steady_state
+  enable_execute_command  = var.enable_execute_command
+  enable_ecs_managed_tags = var.enable_ecs_managed_tags
 
   deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
   deployment_maximum_percent         = var.deployment_maximum_percent
@@ -334,6 +371,11 @@ resource "aws_ecs_service" "service" {
       container_port   = lookup(load_balancer.value, "container_port", var.task_container_port)
       target_group_arn = aws_lb_target_group.task[lookup(load_balancer.value, "target_group_name")].arn
     }
+  }
+
+  deployment_circuit_breaker {
+    enable   = var.enable_deployment_circuit_breaker
+    rollback = var.enable_deployment_circuit_breaker_rollback
   }
 
   deployment_controller {

@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 <a name="unreleased"></a>
 ## [Unreleased]
 
+- Add readonlyRootFilesystem to container_definition ([#64](https://github.com/umotif-public/terraform-aws-ecs-fargate/issues/64))
+
+
+<a name="6.6.0"></a>
+## [6.6.0] - 2022-11-02
+
+- Add new circuit breaker feature ([#63](https://github.com/umotif-public/terraform-aws-ecs-fargate/issues/63))
+
+
+<a name="6.5.2"></a>
+## [6.5.2] - 2022-08-04
+
+- Add entrypoint to task definition parameters ([#61](https://github.com/umotif-public/terraform-aws-ecs-fargate/issues/61))
+
+
+<a name="6.5.1"></a>
+## [6.5.1] - 2022-07-13
+
+- Fix typo ([#57](https://github.com/umotif-public/terraform-aws-ecs-fargate/issues/57))
+
+
+<a name="6.5.0"></a>
+## [6.5.0] - 2022-05-12
+
+- Add support for EnvironmentFiles in container definition ([#60](https://github.com/umotif-public/terraform-aws-ecs-fargate/issues/60))
+- Allow option to customise run_time platform ([#56](https://github.com/umotif-public/terraform-aws-ecs-fargate/issues/56))
+- Enable containerDefinitions portMappings to use target_groups container_ports ([#59](https://github.com/umotif-public/terraform-aws-ecs-fargate/issues/59))
+
+
+<a name="6.4.2"></a>
+## [6.4.2] - 2022-03-11
+
+- Refactor examples to work with provider 4.0.0+ ([#53](https://github.com/umotif-public/terraform-aws-ecs-fargate/issues/53))
 - fix: setting `task_health_command` to null ([#49](https://github.com/umotif-public/terraform-aws-ecs-fargate/issues/49))
 
 
@@ -224,7 +257,12 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.4.1...HEAD
+[Unreleased]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.6.0...HEAD
+[6.6.0]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.5.2...6.6.0
+[6.5.2]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.5.1...6.5.2
+[6.5.1]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.5.0...6.5.1
+[6.5.0]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.4.2...6.5.0
+[6.4.2]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.4.1...6.4.2
 [6.4.1]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.4.0...6.4.1
 [6.4.0]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.3.0...6.4.0
 [6.3.0]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.2.2...6.3.0

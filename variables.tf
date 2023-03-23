@@ -33,6 +33,7 @@ variable "cluster_id" {
 variable "platform_version" {
   description = "The platform version on which to run your service. Only applicable for launch_type set to FARGATE."
   default     = "LATEST"
+  type        = string
 }
 
 variable "task_container_image" {
@@ -93,10 +94,22 @@ variable "task_container_command" {
   type        = list(string)
 }
 
+variable "task_container_entrypoint" {
+  description = "The entrypoint that is passed to the container."
+  default     = []
+  type        = list(string)
+}
+
 variable "task_container_environment" {
   description = "The environment variables to pass to a container."
   default     = {}
   type        = map(string)
+}
+
+variable "task_container_environment_files" {
+  description = "The environment variable files (s3 object arns) to pass to a container. Files must use .env file extension."
+  default     = []
+  type        = list(string)
 }
 
 variable "task_container_secrets" {
@@ -146,6 +159,18 @@ variable "deployment_controller_type" {
   description = "Type of deployment controller. Valid values: CODE_DEPLOY, ECS, EXTERNAL. Default: ECS."
 }
 
+variable "enable_deployment_circuit_breaker" {
+  default     = "false"
+  type        = bool
+  description = "Whether to enable the deployment circuit breaker logic for the service."
+}
+
+variable "enable_deployment_circuit_breaker_rollback" {
+  default     = "false"
+  type        = bool
+  description = "Whether to enable Amazon ECS to roll back the service if a service deployment fails. If rollback is enabled, when a service deployment fails, the service is rolled back to the last deployment that completed successfully."
+}
+
 # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/private-auth.html
 variable "repository_credentials" {
   default     = ""
@@ -162,6 +187,7 @@ variable "repository_credentials_kms_key" {
 variable "create_repository_credentials_iam_policy" {
   default     = false
   description = "Set to true if you are specifying `repository_credentials` variable, it will attach IAM policy with necessary permissions to task role."
+  type        = bool
 }
 
 variable "service_registry_arn" {
@@ -170,7 +196,7 @@ variable "service_registry_arn" {
   type        = string
 }
 
-variable "propogate_tags" {
+variable "propagate_tags" {
   type        = string
   description = "Specifies whether to propagate the tags from the task definition or the service to the tasks. The valid values are SERVICE and TASK_DEFINITION."
   default     = "TASK_DEFINITION"
@@ -215,6 +241,7 @@ variable "proxy_configuration" {
 variable "volume" {
   description = "(Optional) A set of volume blocks that containers in your task may use. This is a list of maps, where each map should contain \"name\", \"host_path\", \"docker_volume_configuration\" and \"efs_volume_configuration\". Full set of options can be found at https://www.terraform.io/docs/providers/aws/r/ecs_task_definition.html"
   default     = []
+  type        = list(any)
 }
 
 variable "task_health_command" {
@@ -293,4 +320,28 @@ variable "enable_execute_command" {
   type        = bool
   description = "Specifies whether to enable Amazon ECS Exec for the tasks within the service."
   default     = true
+}
+
+variable "enable_ecs_managed_tags" {
+  type        = bool
+  description = "Specifies whether to enable Amazon ECS managed tags for the tasks within the service"
+  default     = true
+}
+
+variable "operating_system_family" {
+  description = "The operating system family for the task."
+  default     = "LINUX"
+  type        = string
+}
+
+variable "cpu_architecture" {
+  description = "cpu architecture for the task"
+  default     = "X86_64"
+  type        = string
+}
+
+variable "readonlyRootFilesystem" {
+  default     = false
+  description = "When this parameter is true, the container is given read-only access to its root file system"
+  type        = bool
 }

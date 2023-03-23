@@ -1,3 +1,11 @@
+terraform {
+  required_version = ">= 1.0.11"
+
+  required_providers {
+    aws = ">= 4.0.0"
+  }
+}
+
 provider "aws" {
   region = "eu-west-1"
 }
@@ -93,7 +101,7 @@ module "fargate" {
   private_subnet_ids = data.aws_subnets.all.ids
   cluster_id         = aws_ecs_cluster.cluster.id
 
-  wait_for_steady_state = true
+  wait_for_steady_state = false
 
   platform_version = "1.4.0" # defaults to LATEST
 
@@ -126,7 +134,6 @@ module "fargate" {
   # create_repository_credentials_iam_policy = false
   # repository_credentials                   = aws_secretsmanager_secret.task_credentials.arn
 }
-
 
 resource "aws_security_group" "allow_sg_test" {
   name        = "allow_sg_test"
