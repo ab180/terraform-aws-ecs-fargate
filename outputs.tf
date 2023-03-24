@@ -23,9 +23,9 @@ output "task_role_name" {
   value       = aws_iam_role.task.name
 }
 
-output "service_sg_id" {
+output "service_sg_ids" {
   description = "The Amazon Resource Name (ARN) that identifies the service security group."
-  value       = aws_security_group.ecs_service.id
+  value       = length(var.security_group_ids) > 0 ? var.security_group_ids : [aws_security_group.ecs_service[0].id]
 }
 
 output "service_name" {
