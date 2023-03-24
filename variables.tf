@@ -47,6 +47,12 @@ variable "desired_count" {
   type        = number
 }
 
+variable "container_definition_file_path" {
+  description = "Set if you want to use your own container definition."
+  default     = ""
+  type        = string
+}
+
 variable "task_container_assign_public_ip" {
   description = "Assigned public IP to the container."
   default     = false
@@ -112,6 +118,12 @@ variable "task_container_environment_files" {
   type        = list(string)
 }
 
+variable "task_role_policy_document" {
+  description = "set json string by file() when you want to attach custom iam policy"
+  default     = ""
+  type        = string
+}
+
 variable "task_container_secrets" {
   description = "The secrets variables to pass to a container."
   default     = null
@@ -127,6 +139,7 @@ variable "log_retention_in_days" {
 variable "health_check" {
   description = "A health block containing health check settings for the target group. Overrides the defaults."
   type        = map(string)
+  default     = null
 }
 
 variable "health_check_grace_period_seconds" {
@@ -202,10 +215,22 @@ variable "propagate_tags" {
   default     = "TASK_DEFINITION"
 }
 
+variable "security_group_ids" {
+  type        = list(string)
+  default     = []
+  description = "The arn of the security group ids to associate with ecs service"
+}
+
 variable "target_groups" {
   type        = any
   default     = []
-  description = "The name of the target groups to associate with ecs service"
+  description = "The target group of the target groups to associate with ecs service, which will be created."
+}
+
+variable "target_group_arns" {
+  type        = list(string)
+  default     = []
+  description = "use when you attach target groups already exist."
 }
 
 variable "load_balanced" {

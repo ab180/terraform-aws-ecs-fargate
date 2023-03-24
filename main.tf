@@ -42,6 +42,14 @@ resource "aws_iam_role_policy" "get_environment_files" {
   policy = data.aws_iam_policy_document.get_environment_files[0].json
 }
 
+resource "aws_iam_role_policy" "user_defined" {
+  count = var.task_role_policy_document != "" ? 1 : 0
+
+  name   = "${var.name_prefix}-user-defined"
+  role   = aws_iam_role.execution.id
+  policy = var.task_role_policy_document
+}
+
 #####
 # IAM - Task role, basic. Append policies to this role for S3, DynamoDB etc.
 #####
@@ -70,6 +78,8 @@ resource "aws_iam_role_policy" "ecs_exec_inline_policy" {
 # Security groups
 #####
 resource "aws_security_group" "ecs_service" {
+  count = length(var.security_group_ids) == 0 ? 1 : 0
+
   vpc_id      = var.vpc_id
   name_prefix = var.sg_name_prefix == "" ? "${var.name_prefix}-ecs-service-sg-" : "${var.sg_name_prefix}-"
   description = "Fargate service security group"
@@ -88,7 +98,9 @@ resource "aws_security_group" "ecs_service" {
 }
 
 resource "aws_security_group_rule" "egress_service" {
-  security_group_id = aws_security_group.ecs_service.id
+  count = length(var.security_group_ids) == 0 ? 1 : 0
+
+  security_group_id = aws_security_group.ecs_service[0].id
   type              = "egress"
   protocol          = "-1"
   from_port         = 0
@@ -142,6 +154,10 @@ resource "aws_lb_target_group" "task" {
 # ECS Task/Service
 #####
 locals {
+  container_definitions = var.container_definition_file_path == "" ? "" : templatefile(var.container_definition_file_path, {
+    log_group = "${aws_cloudwatch_log_group.main.name}"
+  })
+
   task_environment = [
     for k, v in var.task_container_environment : {
       name  = k
@@ -180,7 +196,7 @@ resource "aws_ecs_task_definition" "task" {
     }
   }
 
-  container_definitions = <<EOF
+  container_definitions = local.container_definitions != "" ? local.container_definitions : <<EOF
 [{
   "name": "${var.container_name != "" ? var.container_name : var.name_prefix}",
   "image": "${var.task_container_image}",
@@ -351,7 +367,7 @@ resource "aws_ecs_service" "service" {
 
   network_configuration {
     subnets          = var.private_subnet_ids
-    security_groups  = [aws_security_group.ecs_service.id]
+    security_groups  = length(var.security_group_ids) > 0 ? var.security_group_ids : [aws_security_group.ecs_service[0].id]
     assign_public_ip = var.task_container_assign_public_ip
   }
 
@@ -370,6 +386,15 @@ resource "aws_ecs_service" "service" {
       container_name   = var.container_name != "" ? var.container_name : var.name_prefix
       container_port   = lookup(load_balancer.value, "container_port", var.task_container_port)
       target_group_arn = aws_lb_target_group.task[lookup(load_balancer.value, "target_group_name")].arn
+    }
+  }
+
+  dynamic "load_balancer" {
+    for_each = var.load_balanced ? var.target_group_arns : []
+    content {
+      container_name   = var.container_name != "" ? var.container_name : var.name_prefix
+      container_port   = var.task_container_port
+      target_group_arn = load_balancer.value
     }
   }
 
