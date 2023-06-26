@@ -46,7 +46,7 @@ resource "aws_iam_role_policy" "user_defined" {
   count = var.task_role_policy_document != "" ? 1 : 0
 
   name   = "${var.name_prefix}-user-defined"
-  role   = aws_iam_role.execution.id
+  role   = aws_iam_role.task.id
   policy = var.task_role_policy_document
 }
 
