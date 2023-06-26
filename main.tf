@@ -50,6 +50,14 @@ resource "aws_iam_role_policy" "user_defined" {
   policy = var.task_role_policy_document
 }
 
+resource "aws_iam_role_policy" "user_defined_execution" {
+  count = var.task_role_policy_document != "" ? 1 : 0
+
+  name   = "${var.name_prefix}-user-defined-execution"
+  role   = aws_iam_role.execution.id
+  policy = var.task_role_policy_document
+}
+
 #####
 # IAM - Task role, basic. Append policies to this role for S3, DynamoDB etc.
 #####
