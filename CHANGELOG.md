@@ -5,9 +5,35 @@ All notable changes to this project will be documented in this file.
 <a name="unreleased"></a>
 ## [Unreleased]
 
-- fix: protocol set to HTTP by default
-- fix: setting container_name is now mandatory to utilise multiple container names set externally to module
-- chore: upgrade to 5.x compatibility
+
+
+<a name="8.0.1"></a>
+## [8.0.1] - 2023-10-16
+
+- upgrade to 8.0.0
+- fix: attach role policy to both task and execution
+- fix: attach role policy into task role instead of execution role
+- add options for target group, security groups, container def, iam
+- Merge tag '6.7.0'
+- ignore changes: desired count
+
+
+<a name="8.0.0"></a>
+## [8.0.0] - 2023-07-24
+
+- Upgrade to 5.x + Fixes ([#74](https://github.com/umotif-public/terraform-aws-ecs-fargate/issues/74))
+- Refactored container definitions out of module ([#69](https://github.com/umotif-public/terraform-aws-ecs-fargate/issues/69))
+- Make egress rule configurable ([#71](https://github.com/umotif-public/terraform-aws-ecs-fargate/issues/71))
+
+
+<a name="6.7.0-patch-v20230626"></a>
+## [6.7.0-patch-v20230626] - 2023-06-26
+
+- fix: attach role policy to both task and execution
+- fix: attach role policy into task role instead of execution role
+- add options for target group, security groups, container def, iam
+- Merge tag '6.7.0'
+- ignore changes: desired count
 
 
 <a name="7.0.0"></a>
@@ -20,6 +46,19 @@ All notable changes to this project will be documented in this file.
 ## [6.7.1] - 2023-03-28
 
 - Make egress rule configurable ([#71](https://github.com/umotif-public/terraform-aws-ecs-fargate/issues/71))
+
+
+<a name="6.7.0-patch-v20230324"></a>
+## [6.7.0-patch-v20230324] - 2023-03-24
+
+- add options for target group, security groups, container def, iam
+
+
+<a name="6.7.0-patch-v20230323"></a>
+## [6.7.0-patch-v20230323] - 2023-03-23
+
+- Merge tag '6.7.0'
+- ignore changes: desired count
 
 
 <a name="6.7.0"></a>
@@ -53,6 +92,12 @@ All notable changes to this project will be documented in this file.
 - Add support for EnvironmentFiles in container definition ([#60](https://github.com/umotif-public/terraform-aws-ecs-fargate/issues/60))
 - Allow option to customise run_time platform ([#56](https://github.com/umotif-public/terraform-aws-ecs-fargate/issues/56))
 - Enable containerDefinitions portMappings to use target_groups container_ports ([#59](https://github.com/umotif-public/terraform-aws-ecs-fargate/issues/59))
+
+
+<a name="6.4.2-patch-v20220426"></a>
+## [6.4.2-patch-v20220426] - 2022-04-26
+
+- ignore changes: desired count
 
 
 <a name="6.4.2"></a>
@@ -278,14 +323,20 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/7.0.0...HEAD
+[Unreleased]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/8.0.1...HEAD
+[8.0.1]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/8.0.0...8.0.1
+[8.0.0]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.7.0-patch-v20230626...8.0.0
+[6.7.0-patch-v20230626]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/7.0.0...6.7.0-patch-v20230626
 [7.0.0]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.7.1...7.0.0
-[6.7.1]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.7.0...6.7.1
+[6.7.1]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.7.0-patch-v20230324...6.7.1
+[6.7.0-patch-v20230324]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.7.0-patch-v20230323...6.7.0-patch-v20230324
+[6.7.0-patch-v20230323]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.7.0...6.7.0-patch-v20230323
 [6.7.0]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.6.0...6.7.0
 [6.6.0]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.5.2...6.6.0
 [6.5.2]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.5.1...6.5.2
 [6.5.1]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.5.0...6.5.1
-[6.5.0]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.4.2...6.5.0
+[6.5.0]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.4.2-patch-v20220426...6.5.0
+[6.4.2-patch-v20220426]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.4.2...6.4.2-patch-v20220426
 [6.4.2]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.4.1...6.4.2
 [6.4.1]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.4.0...6.4.1
 [6.4.0]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.3.0...6.4.0
