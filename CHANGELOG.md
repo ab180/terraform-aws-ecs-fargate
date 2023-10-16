@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="8.0.3"></a>
+## [8.0.3] - 2023-10-16
+
+- fix wrong outputs
+- update CHANGELOG
+
+
 <a name="8.0.2"></a>
 ## [8.0.2] - 2023-10-16
 
@@ -330,7 +337,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/8.0.2...HEAD
+[Unreleased]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/8.0.3...HEAD
+[8.0.3]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/8.0.2...8.0.3
 [8.0.2]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/8.0.1...8.0.2
 [8.0.1]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/8.0.0...8.0.1
 [8.0.0]: https://github.com/umotif-public/terraform-aws-ecs-fargate/compare/6.7.0-patch-v20230626...8.0.0
