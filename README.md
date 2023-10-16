@@ -92,13 +92,13 @@ Module managed by [uMotif](https://github.com/umotif-public/).
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.11 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.6.0, < 5.0.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.6.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.6.0, < 5.0.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.6.0 |
 
 ## Modules
 
@@ -213,6 +213,7 @@ No modules.
 | <a name="output_target_group_arn"></a> [target\_group\_arn](#output\_target\_group\_arn)             | The ARN of the Target Group used by Load Balancer.                          |
 | <a name="output_target_group_name"></a> [target\_group\_name](#output\_target\_group\_name)          | The Name of the Target Group used by Load Balancer.                         |
 | <a name="output_task_definition_arn"></a> [task\_definition\_arn](#output\_task\_definition\_arn)    | The Amazon Resource Name (ARN) of the task definition created               |
+| <a name="output_task_definition_container_definitions"></a> [task\_definition\_container\_definitions](#output\_task\_definition\_container\_definitions) | A list of container definitions |
 | <a name="output_task_definition_name"></a> [task\_definition\_name](#output\_task\_definition\_name) | The name of the task definition created                                     |
 | <a name="output_task_role_arn"></a> [task\_role\_arn](#output\_task\_role\_arn)                      | The Amazon Resource Name (ARN) specifying the ECS service role.             |
 | <a name="output_task_role_name"></a> [task\_role\_name](#output\_task\_role\_name)                   | The name of the Fargate task service role.                                  |

@@ -128,20 +128,21 @@ resource "aws_lb_target_group" "task" {
   protocol             = var.task_container_protocol
   port                 = lookup(each.value, "container_port", var.task_container_port)
   deregistration_delay = lookup(each.value, "deregistration_delay", null)
-  target_type          = "ip"
+  # awsvpc network mode (required for the AWS Fargate launch type), IP must be the target type.
+  target_type = "ip"
 
 
   dynamic "health_check" {
     for_each = [var.health_check]
     content {
-      enabled             = lookup(health_check.value, "enabled", null)
-      interval            = lookup(health_check.value, "interval", null)
-      path                = lookup(health_check.value, "path", null)
-      port                = lookup(health_check.value, "port", null)
-      protocol            = lookup(health_check.value, "protocol", null)
-      timeout             = lookup(health_check.value, "timeout", null)
-      healthy_threshold   = lookup(health_check.value, "healthy_threshold", null)
-      unhealthy_threshold = lookup(health_check.value, "unhealthy_threshold", null)
+      enabled             = lookup(health_check.value, "enabled", true)
+      interval            = lookup(health_check.value, "interval", 30)
+      path                = lookup(health_check.value, "path", "/")
+      port                = lookup(health_check.value, "port", "traffic-port")
+      protocol            = lookup(health_check.value, "protocol", "HTTP")
+      timeout             = lookup(health_check.value, "timeout", 5)
+      healthy_threshold   = lookup(health_check.value, "healthy_threshold", 5)
+      unhealthy_threshold = lookup(health_check.value, "unhealthy_threshold", 2)
       matcher             = lookup(health_check.value, "matcher", null)
     }
   }
@@ -391,7 +392,7 @@ resource "aws_ecs_service" "service" {
   dynamic "load_balancer" {
     for_each = var.load_balanced ? var.target_groups : []
     content {
-      container_name   = var.container_name != "" ? var.container_name : var.name_prefix
+      container_name   = try(load_balancer.value, "container_name") != "" ? lookup(load_balancer.value, "container_name") : var.name_prefix
       container_port   = lookup(load_balancer.value, "container_port", var.task_container_port)
       target_group_arn = aws_lb_target_group.task[lookup(load_balancer.value, "target_group_name")].arn
     }
