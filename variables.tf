@@ -3,6 +3,12 @@ variable "name_prefix" {
   type        = string
 }
 
+variable "log_group_name" {
+  description = "A log group name."
+  type        = string
+  default     = null
+}
+
 variable "sg_name_prefix" {
   description = "A prefix used for Security group name."
   type        = string
