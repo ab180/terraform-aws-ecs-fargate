@@ -163,9 +163,11 @@ resource "aws_lb_target_group" "task" {
 # ECS Task/Service
 #####
 locals {
-  container_definitions = var.container_definition_file_path == "" ? "" : templatefile(var.container_definition_file_path, {
-    log_group = "${aws_cloudwatch_log_group.main.name}"
-  })
+  container_definitions = var.container_definitions != null ? var.container_definitions : (
+    var.container_definition_file_path == "" ? "" : templatefile(var.container_definition_file_path, {
+      log_group = "${aws_cloudwatch_log_group.main.name}"
+    })
+  )
 
   task_environment = [
     for k, v in var.task_container_environment : {
