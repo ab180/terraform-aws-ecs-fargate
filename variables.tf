@@ -127,13 +127,13 @@ variable "task_role_policy_document" {
 }
 
 variable "task_role_arn" {
-  description = "ARN of an existing IAM role to use as the task role. If not provided, a new role will be created."
+  description = "ARN of an existing IAM role to use as the task role. If not provided, a new role will be created. Note: when set, task_role_policy_document is NOT applied to the provided role — ensure the role already has the required permissions."
   type        = string
   default     = ""
 }
 
 variable "task_execution_role_arn" {
-  description = "ARN of an existing IAM role to use as the task execution role. If not provided, a new role will be created."
+  description = "ARN of an existing IAM role to use as the task execution role. If not provided, a new role will be created. Note: when set, task_role_policy_document is NOT applied to the provided role — ensure the role already has the required permissions (e.g. ECR pull, Secrets Manager access)."
   type        = string
   default     = ""
 }
