@@ -193,12 +193,12 @@ locals {
 
 resource "aws_ecs_task_definition" "task" {
   family                   = var.name_prefix
-  execution_role_arn       = aws_iam_role.execution.arn
+  execution_role_arn       = var.task_execution_role_arn != "" ? var.task_execution_role_arn : aws_iam_role.execution.arn
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = var.task_definition_cpu
   memory                   = var.task_definition_memory
-  task_role_arn            = aws_iam_role.task.arn
+  task_role_arn            = var.task_role_arn != "" ? var.task_role_arn : aws_iam_role.task.arn
 
   dynamic "ephemeral_storage" {
     for_each = var.task_definition_ephemeral_storage == 0 ? [] : [var.task_definition_ephemeral_storage]

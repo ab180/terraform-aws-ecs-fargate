@@ -126,6 +126,18 @@ variable "task_role_policy_document" {
   type        = string
 }
 
+variable "task_role_arn" {
+  description = "ARN of an existing IAM role to use as the task role. If not provided, a new role will be created."
+  type        = string
+  default     = ""
+}
+
+variable "task_execution_role_arn" {
+  description = "ARN of an existing IAM role to use as the task execution role. If not provided, a new role will be created."
+  type        = string
+  default     = ""
+}
+
 variable "task_container_secrets" {
   description = "The secrets variables to pass to a container."
   default     = null

@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="8.1.0"></a>
+## [8.1.0] - 2026-03-12
+
+- feat: add `task_execution_role_arn` and `task_role_arn` variables to allow overriding auto-created IAM roles
+
+
 <a name="8.0.4"></a>
 ## [8.0.4] - 2023-10-16
 
