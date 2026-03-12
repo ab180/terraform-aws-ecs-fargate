@@ -20,7 +20,7 @@ output "task_role_arn" {
 
 output "task_role_name" {
   description = "The name of the Fargate task service role."
-  value       = var.task_role_arn != "" ? null : aws_iam_role.task.name
+  value       = var.task_role_arn != "" ? element(split("/", var.task_role_arn), length(split("/", var.task_role_arn)) - 1) : aws_iam_role.task.name
 }
 
 output "service_sg_ids" {
@@ -45,7 +45,7 @@ output "execution_role_arn" {
 
 output "execution_role_name" {
   description = "The name of the ECS execution role."
-  value       = var.task_execution_role_arn != "" ? null : aws_iam_role.execution.name
+  value       = var.task_execution_role_arn != "" ? element(split("/", var.task_execution_role_arn), length(split("/", var.task_execution_role_arn)) - 1) : aws_iam_role.execution.name
 }
 
 output "task_definition_arn" {
