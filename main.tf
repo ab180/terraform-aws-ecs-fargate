@@ -2,7 +2,7 @@
 # Cloudwatch
 #####
 resource "aws_cloudwatch_log_group" "main" {
-  name = var.name_prefix
+  name = coalesce(var.log_group_name, var.name_prefix)
 
   retention_in_days = var.log_retention_in_days
   kms_key_id        = var.logs_kms_key
